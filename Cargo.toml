@@ -1,0 +1,12 @@
+[package]
+name = "grex_framebuffer_extract"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+oneshot = "0.1.6"
+pollster = "0.3.0"
+
+[dependencies.bevy]
+version = "0.13"
+features = ["dynamic_linking"]
