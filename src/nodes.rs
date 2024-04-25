@@ -11,7 +11,7 @@ pub struct FramebufferExtractNode;
 impl Node for FramebufferExtractNode {
     fn run(
         &self,
-        graph: &mut RenderGraphContext,
+        _graph: &mut RenderGraphContext,
         render_context: &mut RenderContext,
         world: &World,
     ) -> Result<(), NodeRunError> {

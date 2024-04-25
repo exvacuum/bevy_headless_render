@@ -8,11 +8,6 @@ mod systems;
 mod nodes;
 pub mod render_assets;
 
-
-pub enum FramebufferExtractSet {
-    Set
-}
-
 pub struct FramebufferExtractPlugin;
 
 impl Plugin for FramebufferExtractPlugin {

@@ -1,5 +1,3 @@
-use std::time::Duration;
-
 use bevy::{prelude::*, render::{render_asset::{RenderAssets, RenderAssetUsages}, renderer::RenderDevice, render_resource::{MapMode, Maintain, Extent3d, TextureDimension}}};
 
 use pollster::FutureExt;
