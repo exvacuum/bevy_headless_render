@@ -4,6 +4,7 @@ use bevy::{ecs::query::QueryItem, prelude::*, render::extract_component::Extract
 
 use crate::render_assets::FramebufferExtractSource;
 
+/// Framebuffer extraction destination. Contains the image which the framebuffer is extracted to.
 #[derive(Component, Default, Clone)]
 pub struct FramebufferExtractDestination(pub Arc<Mutex<Image>>);
 
@@ -21,8 +22,11 @@ impl ExtractComponent for FramebufferExtractDestination {
     }
 }
 
+/// Bundle containing both a source and destination for framebuffer extraction.
 #[derive(Bundle)]
 pub struct ExtractFramebufferBundle {
+    /// Source
     pub source: Handle<FramebufferExtractSource>,
+    /// Destination
     pub dest: FramebufferExtractDestination,
 }

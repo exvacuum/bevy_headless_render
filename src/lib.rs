@@ -1,3 +1,8 @@
+#![warn(missing_docs)]
+
+//! Plugin for the Bevy game engine which provides the ability to extract the frambuffer image after rendering
+//! to use for whatever you want.
+
 use bevy::{
     prelude::*,
     render::{
@@ -9,11 +14,15 @@ use components::FramebufferExtractDestination;
 use nodes::{FramebufferExtractLabel, FramebufferExtractNode};
 use render_assets::FramebufferExtractSource;
 
+/// Components used by this plugin.
 pub mod components;
-mod nodes;
+/// Render assets used by this plugin.
 pub mod render_assets;
+
+mod nodes;
 mod systems;
 
+/// Plugin which handles framebuffer extraction.
 pub struct FramebufferExtractPlugin;
 
 impl Plugin for FramebufferExtractPlugin {

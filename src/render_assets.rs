@@ -8,15 +8,18 @@ use bevy::{
     },
 };
 
+/// Render-world version of FramebufferExtractSource
 pub struct GpuFramebufferExtractSource {
-    pub buffer: Buffer,
-    pub source_handle: Handle<Image>,
-    pub source_size: Extent3d,
-    pub bytes_per_row: u32,
-    pub padded_bytes_per_row: u32,
-    pub format: TextureFormat,
+    pub(crate) buffer: Buffer,
+    pub(crate) source_handle: Handle<Image>,
+    pub(crate) source_size: Extent3d,
+    pub(crate) bytes_per_row: u32,
+    pub(crate) padded_bytes_per_row: u32,
+    pub(crate) format: TextureFormat,
 }
 
+/// Framebuffer extraction source. Contains a handle to the render texture which will be extracted
+/// from.
 #[derive(Asset, Reflect, Clone, Default)]
 pub struct FramebufferExtractSource(pub Handle<Image>);
 

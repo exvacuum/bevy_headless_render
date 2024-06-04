@@ -1,4 +1,4 @@
-# grex_framebuffer_extract
+# bevy_framebuffer_extract
 
 
 A plugin for the [Bevy](https://bevyengine.org) engine which allows for exporting framebuffer data from a camera.
@@ -15,8 +15,8 @@ Currently it only supports cameras which render to a render texture.
 
 ### Using git URL in Cargo.toml
 ```toml
-[dependencies.grex_framebuffer_extract]
-git = "https://github.com/exvacuum/grex_framebuffer_extract.git"
+[dependencies.bevy_framebuffer_extract]
+git = "https://github.com/exvacuum/bevy_framebuffer_extract.git"
 ```
 
 ## Usage
@@ -24,13 +24,13 @@ git = "https://github.com/exvacuum/grex_framebuffer_extract.git"
 In `main.rs`:
 ```rs
 use bevy::prelude::*;
-use grex_framebuffer_extract;
+use bevy_framebuffer_extract;
 
 fn main() {
     App::new()
         .add_plugins((
             DefaultPlugins,
-            grex_framebuffer_extract::FramebufferExtractPlugin,
+            bevy_framebuffer_extract::FramebufferExtractPlugin,
         ))
         .run();
 }
@@ -72,7 +72,7 @@ commands.spawn((
         },
         ..Default::default()
     },
-    grex_framebuffer_extract::ExtractFramebufferBundle {
+    bevy_framebuffer_extract::ExtractFramebufferBundle {
         source: framebuffer_extract_sources.add(FramebufferExtractSource(image_handle.clone())), // ResMut<Assets<FramebufferExtractSource>>
         destination: FramebufferExtractDestination::default(),
     },
