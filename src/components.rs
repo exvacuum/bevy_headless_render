@@ -1,6 +1,6 @@
-use std::sync::{Mutex, Arc};
+use std::sync::{Arc, Mutex};
 
-use bevy::{prelude::*, render::extract_component::ExtractComponent, ecs::query::QueryItem};
+use bevy::{ecs::query::QueryItem, prelude::*, render::extract_component::ExtractComponent};
 
 use crate::render_assets::FramebufferExtractSource;
 
@@ -8,20 +8,16 @@ use crate::render_assets::FramebufferExtractSource;
 pub struct FramebufferExtractDestination(pub Arc<Mutex<Image>>);
 
 impl ExtractComponent for FramebufferExtractDestination {
-    type QueryData = (
-        &'static Self,
-        &'static Handle<FramebufferExtractSource>,
-    );
+    type QueryData = (&'static Self, &'static Handle<FramebufferExtractSource>);
 
     type QueryFilter = ();
 
     type Out = (Self, Handle<FramebufferExtractSource>);
 
-    fn extract_component((destination, source_handle): QueryItem<'_, Self::QueryData>) -> Option<Self::Out> {
-        Some((
-            destination.clone(),
-            source_handle.clone(),
-        ))
+    fn extract_component(
+        (destination, source_handle): QueryItem<'_, Self::QueryData>,
+    ) -> Option<Self::Out> {
+        Some((destination.clone(), source_handle.clone()))
     }
 }
 
@@ -30,4 +26,3 @@ pub struct ExtractFramebufferBundle {
     pub source: Handle<FramebufferExtractSource>,
     pub dest: FramebufferExtractDestination,
 }
-

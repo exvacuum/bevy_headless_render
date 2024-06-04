@@ -1,4 +1,12 @@
-use bevy::{prelude::*, render::{render_asset::{RenderAsset, RenderAssets, RenderAssetUsages, PrepareAssetError}, render_resource::{Buffer, Extent3d, BufferUsages, BufferDescriptor, TextureFormat}, renderer::RenderDevice}, ecs::system::{lifetimeless::SRes, SystemParamItem}};
+use bevy::{
+    ecs::system::{lifetimeless::SRes, SystemParamItem},
+    prelude::*,
+    render::{
+        render_asset::{PrepareAssetError, RenderAsset, RenderAssetUsages, RenderAssets},
+        render_resource::{Buffer, BufferDescriptor, BufferUsages, Extent3d, TextureFormat},
+        renderer::RenderDevice,
+    },
+};
 
 pub struct GpuFramebufferExtractSource {
     pub buffer: Buffer,
@@ -24,19 +32,20 @@ impl RenderAsset for FramebufferExtractSource {
         self,
         (device, images): &mut SystemParamItem<Self::Param>,
     ) -> Result<Self::PreparedAsset, PrepareAssetError<Self>> {
-        
         let Some(gpu_image) = images.get(&self.0) else {
             warn!("Failed to get GPU image");
-            return Err(PrepareAssetError::RetryNextUpdate(self))
+            return Err(PrepareAssetError::RetryNextUpdate(self));
         };
 
         let size = gpu_image.texture.size();
         let format = gpu_image.texture_format;
-        let bytes_per_row = (size.width / format.block_dimensions().0) * format.block_copy_size(None).unwrap();
-        let padded_bytes_per_row = RenderDevice::align_copy_bytes_per_row(bytes_per_row as usize) as u32;
+        let bytes_per_row =
+            (size.width / format.block_dimensions().0) * format.block_copy_size(None).unwrap();
+        let padded_bytes_per_row =
+            RenderDevice::align_copy_bytes_per_row(bytes_per_row as usize) as u32;
 
         Ok(GpuFramebufferExtractSource {
-            buffer: device.create_buffer(&BufferDescriptor { 
+            buffer: device.create_buffer(&BufferDescriptor {
                 label: Some("framebuffer_extract_buffer"),
                 size: (size.height * padded_bytes_per_row) as u64,
                 usage: BufferUsages::COPY_DST | BufferUsages::MAP_READ,

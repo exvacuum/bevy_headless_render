@@ -1,4 +1,12 @@
-use bevy::{prelude::*, render::{render_graph::{Node, RenderGraphContext, NodeRunError, RenderLabel}, renderer::RenderContext, render_asset::RenderAssets, render_resource::{ImageCopyBuffer, ImageDataLayout}}};
+use bevy::{
+    prelude::*,
+    render::{
+        render_asset::RenderAssets,
+        render_graph::{Node, NodeRunError, RenderGraphContext, RenderLabel},
+        render_resource::{ImageCopyBuffer, ImageDataLayout},
+        renderer::RenderContext,
+    },
+};
 
 use crate::render_assets::FramebufferExtractSource;
 
@@ -15,9 +23,15 @@ impl Node for FramebufferExtractNode {
         render_context: &mut RenderContext,
         world: &World,
     ) -> Result<(), NodeRunError> {
-        for (_, source) in world.resource::<RenderAssets<FramebufferExtractSource>>().iter() {
-            let Some(gpu_image) = world.resource::<RenderAssets<Image>>().get(&source.source_handle) else {
-                return Ok(())
+        for (_, source) in world
+            .resource::<RenderAssets<FramebufferExtractSource>>()
+            .iter()
+        {
+            let Some(gpu_image) = world
+                .resource::<RenderAssets<Image>>()
+                .get(&source.source_handle)
+            else {
+                return Ok(());
             };
 
             render_context.command_encoder().copy_texture_to_buffer(

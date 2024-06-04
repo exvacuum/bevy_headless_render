@@ -1,11 +1,21 @@
-use bevy::{prelude::*, render::{render_asset::{RenderAssets, RenderAssetUsages}, renderer::RenderDevice, render_resource::{MapMode, Maintain, Extent3d, TextureDimension}}};
+use bevy::{
+    prelude::*,
+    render::{
+        render_asset::{RenderAssetUsages, RenderAssets},
+        render_resource::{Extent3d, Maintain, MapMode, TextureDimension},
+        renderer::RenderDevice,
+    },
+};
 
 use pollster::FutureExt;
 
-use crate::{render_assets::FramebufferExtractSource, components::FramebufferExtractDestination};
+use crate::{components::FramebufferExtractDestination, render_assets::FramebufferExtractSource};
 
 pub fn extract_framebuffers(
-    mut extract_bundles: Query<(&Handle<FramebufferExtractSource>, &mut FramebufferExtractDestination)>, 
+    mut extract_bundles: Query<(
+        &Handle<FramebufferExtractSource>,
+        &mut FramebufferExtractDestination,
+    )>,
     sources: Res<RenderAssets<FramebufferExtractSource>>,
     device: Res<RenderDevice>,
 ) {
@@ -25,7 +35,7 @@ pub fn extract_framebuffers(
                 device.poll(Maintain::Wait);
                 rx.block_on().unwrap().unwrap();
             }
-             
+
             slice.get_mapped_range().to_vec()
         };
 
@@ -39,7 +49,8 @@ pub fn extract_framebuffers(
 
         std::thread::spawn(move || {
             if bytes_per_row != padded_bytes_per_row {
-                let mut unpadded_bytes = Vec::<u8>::with_capacity(source_size.height as usize * bytes_per_row);
+                let mut unpadded_bytes =
+                    Vec::<u8>::with_capacity(source_size.height as usize * bytes_per_row);
                 for padded_row in image_bytes.chunks(padded_bytes_per_row) {
                     unpadded_bytes.extend_from_slice(&padded_row[..bytes_per_row]);
                 }
@@ -59,5 +70,4 @@ pub fn extract_framebuffers(
             );
         });
     }
-
 }
