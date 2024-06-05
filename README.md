@@ -1,9 +1,9 @@
 # bevy_framebuffer_extract
 
 ![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)
-![Tag](https://img.shields.io/github/v/tag/exvacuum/bevy_terminal_display)
-![Build](https://img.shields.io/github/actions/workflow/status/exvacuum/bevy_terminal_display/rust.yml)
-[![Docs](https://img.shields.io/website?url=https%3A%2F%2Fexvacuum.github.io%2Fbevy_terminal_display%2F&label=docs)](https://exvacuum.github.io/bevy_terminal_display)
+![Tag](https://img.shields.io/github/v/tag/exvacuum/bevy_framebuffer_extract)
+![Build](https://img.shields.io/github/actions/workflow/status/exvacuum/bevy_framebuffer_extract/rust.yml)
+[![Docs](https://img.shields.io/website?url=https%3A%2F%2Fexvacuum.github.io%2Fbevy_framebuffer_extract%2F&label=docs)](https://exvacuum.github.io/bevy_framebuffer_extract)
 
 A plugin for the [Bevy](https://bevyengine.org) engine which allows for exporting framebuffer data from a camera.
 
