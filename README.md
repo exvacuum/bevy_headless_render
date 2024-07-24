@@ -21,7 +21,7 @@ Every frame will be copied from `HeadlessRenderSource` render textures into `Hea
 ### crates.io
 ```toml
 [dependencies]
-bevy_headless_render = "0.2"
+bevy_headless_render = "0.1"
 ```
 
 ### Using git URL in Cargo.toml
