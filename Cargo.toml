@@ -1,11 +1,13 @@
 [package]
-name = "bevy_framebuffer_extract"
-version = "0.1.2"
+name = "bevy_headless_render"
+version = "0.1.0"
 edition = "2021"
+description = "A plugin for the bevy engine which enables headless rendering to an image for use in the main world."
+license = "0BSD OR MIT OR Apache-2.0"
 
 [dependencies]
 oneshot = "0.1.6"
 pollster = "0.3.0"
 
 [dependencies.bevy]
-version = "0.13"
+version = "0.14"

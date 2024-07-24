@@ -1,7 +1,6 @@
 #![warn(missing_docs)]
 
-//! Plugin for the Bevy game engine which provides the ability to extract the frambuffer image after rendering
-//! to use for whatever you want.
+//! Plugin for the Bevy game engine which provides the ability to render to an image headlessly.
 
 use bevy::{
     prelude::*,
@@ -10,9 +9,9 @@ use bevy::{
         render_asset::RenderAssetPlugin, render_graph::RenderGraph, Render, RenderApp, RenderSet,
     },
 };
-use components::FramebufferExtractDestination;
-use nodes::{FramebufferExtractLabel, FramebufferExtractNode};
-use render_assets::FramebufferExtractSource;
+use components::HeadlessRenderDestination;
+use nodes::{HeadlessRenderCopyLabel, HeadlessRenderCopyNode};
+use render_assets::{HeadlessRenderSource, GpuHeadlessRenderSource};
 
 /// Components used by this plugin.
 pub mod components;
@@ -22,28 +21,28 @@ pub mod render_assets;
 mod nodes;
 mod systems;
 
-/// Plugin which handles framebuffer extraction.
-pub struct FramebufferExtractPlugin;
+/// Plugin which handles headless rendering.
+pub struct HeadlessRenderPlugin;
 
-impl Plugin for FramebufferExtractPlugin {
+impl Plugin for HeadlessRenderPlugin {
     fn build(&self, app: &mut App) {
-        app.register_type::<FramebufferExtractSource>()
-            .init_asset::<FramebufferExtractSource>()
-            .register_asset_reflect::<FramebufferExtractSource>()
+        app.register_type::<HeadlessRenderSource>()
+            .init_asset::<HeadlessRenderSource>()
+            .register_asset_reflect::<HeadlessRenderSource>()
             .add_plugins((
-                RenderAssetPlugin::<FramebufferExtractSource>::default(),
-                ExtractComponentPlugin::<FramebufferExtractDestination>::default(),
+                RenderAssetPlugin::<GpuHeadlessRenderSource>::default(),
+                ExtractComponentPlugin::<HeadlessRenderDestination>::default(),
             ));
 
         let render_app = app.sub_app_mut(RenderApp);
         render_app.add_systems(
             Render,
-            systems::extract_framebuffers
+            systems::copy_buffers
                 .after(RenderSet::Render)
                 .before(RenderSet::Cleanup),
         );
-        let mut graph = render_app.world.resource_mut::<RenderGraph>();
-        graph.add_node(FramebufferExtractLabel, FramebufferExtractNode);
-        graph.add_node_edge(CameraDriverLabel, FramebufferExtractLabel);
+        let mut graph = render_app.world_mut().resource_mut::<RenderGraph>();
+        graph.add_node(HeadlessRenderCopyLabel, HeadlessRenderCopyNode);
+        graph.add_node_edge(CameraDriverLabel, HeadlessRenderCopyLabel);
     }
 }

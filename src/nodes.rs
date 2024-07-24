@@ -4,19 +4,19 @@ use bevy::{
         render_asset::RenderAssets,
         render_graph::{Node, NodeRunError, RenderGraphContext, RenderLabel},
         render_resource::{ImageCopyBuffer, ImageDataLayout},
-        renderer::RenderContext,
+        renderer::RenderContext, texture::GpuImage,
     },
 };
 
-use crate::render_assets::FramebufferExtractSource;
+use crate::render_assets::GpuHeadlessRenderSource;
 
 #[derive(RenderLabel, Clone, PartialEq, Eq, Debug, Hash)]
-pub struct FramebufferExtractLabel;
+pub struct HeadlessRenderCopyLabel;
 
 #[derive(Default)]
-pub struct FramebufferExtractNode;
+pub struct HeadlessRenderCopyNode;
 
-impl Node for FramebufferExtractNode {
+impl Node for HeadlessRenderCopyNode {
     fn run(
         &self,
         _graph: &mut RenderGraphContext,
@@ -24,12 +24,12 @@ impl Node for FramebufferExtractNode {
         world: &World,
     ) -> Result<(), NodeRunError> {
         for (_, source) in world
-            .resource::<RenderAssets<FramebufferExtractSource>>()
+            .resource::<RenderAssets<GpuHeadlessRenderSource>>()
             .iter()
         {
             let Some(gpu_image) = world
-                .resource::<RenderAssets<Image>>()
-                .get(&source.source_handle)
+                .resource::<RenderAssets<GpuImage>>()
+                .get(source.source_handle.id())
             else {
                 return Ok(());
             };

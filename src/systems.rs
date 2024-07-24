@@ -9,17 +9,17 @@ use bevy::{
 
 use pollster::FutureExt;
 
-use crate::{components::FramebufferExtractDestination, render_assets::FramebufferExtractSource};
+use crate::{components::HeadlessRenderDestination, render_assets::{HeadlessRenderSource, GpuHeadlessRenderSource}};
 
-pub fn extract_framebuffers(
-    mut extract_bundles: Query<(
-        &Handle<FramebufferExtractSource>,
-        &mut FramebufferExtractDestination,
+pub fn copy_buffers(
+    mut headless_render_query: Query<(
+        &Handle<HeadlessRenderSource>,
+        &mut HeadlessRenderDestination,
     )>,
-    sources: Res<RenderAssets<FramebufferExtractSource>>,
+    sources: Res<RenderAssets<GpuHeadlessRenderSource>>,
     device: Res<RenderDevice>,
 ) {
-    for (source_handle, destination_handle) in extract_bundles.iter_mut() {
+    for (source_handle, destination_handle) in headless_render_query.iter_mut() {
         let Some(gpu_source) = sources.get(source_handle) else {
             continue;
         };

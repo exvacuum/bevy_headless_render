@@ -2,18 +2,18 @@ use std::sync::{Arc, Mutex};
 
 use bevy::{ecs::query::QueryItem, prelude::*, render::extract_component::ExtractComponent};
 
-use crate::render_assets::FramebufferExtractSource;
+use crate::render_assets::HeadlessRenderSource;
 
-/// Framebuffer extraction destination. Contains the image which the framebuffer is extracted to.
+/// Headless render destination. Contains the image which the rendered frame is copied to.
 #[derive(Component, Default, Clone)]
-pub struct FramebufferExtractDestination(pub Arc<Mutex<Image>>);
+pub struct HeadlessRenderDestination(pub Arc<Mutex<Image>>);
 
-impl ExtractComponent for FramebufferExtractDestination {
-    type QueryData = (&'static Self, &'static Handle<FramebufferExtractSource>);
+impl ExtractComponent for HeadlessRenderDestination {
+    type QueryData = (&'static Self, &'static Handle<HeadlessRenderSource>);
 
     type QueryFilter = ();
 
-    type Out = (Self, Handle<FramebufferExtractSource>);
+    type Out = (Self, Handle<HeadlessRenderSource>);
 
     fn extract_component(
         (destination, source_handle): QueryItem<'_, Self::QueryData>,
@@ -22,11 +22,11 @@ impl ExtractComponent for FramebufferExtractDestination {
     }
 }
 
-/// Bundle containing both a source and destination for framebuffer extraction.
+/// Bundle containing both a source and destination for headless rendering.
 #[derive(Bundle)]
-pub struct ExtractFramebufferBundle {
+pub struct HeadlessRenderBundle {
     /// Source
-    pub source: Handle<FramebufferExtractSource>,
+    pub source: Handle<HeadlessRenderSource>,
     /// Destination
-    pub dest: FramebufferExtractDestination,
+    pub dest: HeadlessRenderDestination,
 }
