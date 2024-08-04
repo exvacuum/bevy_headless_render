@@ -40,7 +40,10 @@ use bevy_headless_render;
 fn main() {
     App::new()
         .add_plugins((
-            DefaultPlugins,
+            DefaultPlugins
+            .build()
+            .disable::<WinitPlugin>(),
+            ScheduleRunnerPlugin::run_loop(Duration::from_secs_f32(1.0 / TICK_RATE)),
             bevy_headless_render::HeadlessRenderPlugin,
         ))
         .run();
