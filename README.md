@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)
 ![Tag](https://img.shields.io/github/v/tag/exvacuum/bevy_headless_render)
 ![Build](https://img.shields.io/github/actions/workflow/status/exvacuum/bevy_headless_render/rust.yml)
-[![Docs](https://img.shields.io/website?url=https%3A%2F%2Fexvacuum.github.io%2Fbevy_headless_render%2F&label=docs)](https://exvacuum.github.io/bevy_headless_render)
+[![Docs](https://img.shields.io/docsrs/bevy_headless_render)](https://exvacuum.github.io/bevy_headless_render)
 
 A plugin for the [Bevy](https://bevyengine.org) engine which allows for headless rendering.
 
