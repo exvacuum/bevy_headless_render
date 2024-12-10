@@ -1,15 +1,15 @@
 [package]
 name = "bevy_headless_render"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2021"
 description = "A plugin for the bevy engine which enables headless rendering to an image for use in the main world."
 license = "0BSD OR MIT OR Apache-2.0"
 
 [dependencies]
-oneshot = "0.1.6"
-pollster = "0.3.0"
+oneshot = "0.1"
+pollster = "0.4"
 
 [dependencies.bevy]
-version = "0.14"
+version = "0.15"
 default-features = false
-features = ["bevy_render", "bevy_asset"]
+features = ["bevy_render", "bevy_asset", "png", "bevy_pbr"]

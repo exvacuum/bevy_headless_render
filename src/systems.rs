@@ -9,18 +9,18 @@ use bevy::{
 
 use pollster::FutureExt;
 
-use crate::{components::HeadlessRenderDestination, render_assets::{HeadlessRenderSource, GpuHeadlessRenderSource}};
+use crate::{
+    components::{HeadlessRenderDestination, HeadlessRenderSource},
+    render_assets::GpuHeadlessRenderSource,
+};
 
 pub fn copy_buffers(
-    mut headless_render_query: Query<(
-        &Handle<HeadlessRenderSource>,
-        &mut HeadlessRenderDestination,
-    )>,
+    mut headless_render_query: Query<(&HeadlessRenderSource, &mut HeadlessRenderDestination)>,
     sources: Res<RenderAssets<GpuHeadlessRenderSource>>,
     device: Res<RenderDevice>,
 ) {
     for (source_handle, destination_handle) in headless_render_query.iter_mut() {
-        let Some(gpu_source) = sources.get(source_handle) else {
+        let Some(gpu_source) = sources.get(source_handle.id()) else {
             continue;
         };
 

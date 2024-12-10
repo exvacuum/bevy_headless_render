@@ -1,19 +1,19 @@
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
 use bevy::{ecs::query::QueryItem, prelude::*, render::extract_component::ExtractComponent};
 
-use crate::render_assets::HeadlessRenderSource;
+use crate::render_assets;
 
 /// Headless render destination. Contains the image which the rendered frame is copied to.
 #[derive(Component, Default, Clone)]
 pub struct HeadlessRenderDestination(pub Arc<Mutex<Image>>);
 
 impl ExtractComponent for HeadlessRenderDestination {
-    type QueryData = (&'static Self, &'static Handle<HeadlessRenderSource>);
+    type QueryData = (&'static Self, &'static HeadlessRenderSource);
 
     type QueryFilter = ();
 
-    type Out = (Self, Handle<HeadlessRenderSource>);
+    type Out = (Self, HeadlessRenderSource);
 
     fn extract_component(
         (destination, source_handle): QueryItem<'_, Self::QueryData>,
@@ -22,11 +22,21 @@ impl ExtractComponent for HeadlessRenderDestination {
     }
 }
 
-/// Bundle containing both a source and destination for headless rendering.
-#[derive(Bundle)]
-pub struct HeadlessRenderBundle {
-    /// Source
-    pub source: Handle<HeadlessRenderSource>,
-    /// Destination
-    pub dest: HeadlessRenderDestination,
+impl HeadlessRenderDestination {
+    /// Get lock on this destination's image
+    pub fn image(&self) -> Result<MutexGuard<Image>, PoisonError<MutexGuard<Image>>> {
+        self.0.lock()
+    }
+}
+
+/// Headless render source
+#[derive(Component, Debug, Clone, DerefMut, Deref)]
+#[require(HeadlessRenderDestination, Camera3d)]
+pub struct HeadlessRenderSource(pub Handle<render_assets::HeadlessRenderSource>);
+
+impl HeadlessRenderSource {
+    /// Create a new headless render source from the provided image
+    pub fn new(asset_server: &AssetServer, image: Handle<Image>) -> Self {
+        Self(asset_server.add(render_assets::HeadlessRenderSource(image)))
+    }
 }
